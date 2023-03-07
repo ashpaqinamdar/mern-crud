@@ -4,6 +4,7 @@ import Axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { getAllBooks } from "../../URL/index";
 
 function HomePage() {
   const [books, setBooks] = useState([]);
@@ -13,7 +14,7 @@ function HomePage() {
   }, []);
 
   const getBooks = (e) => {
-    Axios.get("http://localhost:3001/get-books")
+    Axios.get(getAllBooks)
       .then((res) => {
         setBooks(res.data);
       })
