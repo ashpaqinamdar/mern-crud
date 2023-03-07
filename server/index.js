@@ -1,11 +1,12 @@
 const express = require("express");
 const app = express();
-const mysql = require("mysql");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const BookModel = require("./models/Books");
+
 app.use(cors());
 app.use(express.json());
+
 mongoose.connect(
   "mongodb+srv://inamdarashpaq:qP6bJh1JICE3dqF2@merncrud.3c3bmys.mongodb.net/?retryWrites=true&w=majority",
   {
