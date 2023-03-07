@@ -2,18 +2,18 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql");
 const cors = require("cors");
-
+const mongoose = require("mongoose");
+const BookModel = require("./models/Books");
 app.use(cors());
 app.use(express.json());
+mongoose.connect(
+  "mongodb+srv://inamdarashpaq:qP6bJh1JICE3dqF2@merncrud.3c3bmys.mongodb.net/?retryWrites=true&w=majority",
+  {
+    useNewUrlParser: true,
+  }
+);
 
-const db = mysql.createConnection({
-  user: "root",
-  host: "localhost",
-  password: "password",
-  database: "booksSchema",
-});
-
-app.post("/add-book", (req, res) => {
+app.post("/add-book", async (req, res) => {
   const bookName = req.body.bookName;
   const genre = req.body.genre;
   const hardBound = req.body.hardBound;
@@ -21,48 +21,44 @@ app.post("/add-book", (req, res) => {
   const paperBack = req.body.paperBack;
   const price = req.body.price;
 
-  db.query(
-    "INSERT INTO books (bookName,genre,price,hardBound,pdf,paperBack) VALUES (?,?,?,?,?,?)",
-    [bookName, genre, price, hardBound, pdf, paperBack],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send("data inserted successfully");
-      }
-    }
-  );
-});
-
-app.get("/get-books", (req, res) => {
-  db.query("SELECT  * FROM books", (err, result) => {
-    if (err) {
-      res.send(err);
-    } else {
-      const converted = result.map((item) => {
-        item.paperBack = Boolean(item.paperBack);
-        item.hardBound = Boolean(item.hardBound);
-        item.pdf = Boolean(item.pdf);
-        return item;
-      });
-
-      res.send(converted);
-    }
+  const book = new BookModel({
+    bookName: bookName,
+    genre: genre,
+    hardBound: hardBound,
+    pdf: pdf,
+    paperBack: paperBack,
+    price: price,
   });
+
+  try {
+    await book.save();
+    res.send("Data inserted");
+  } catch (err) {
+    console.log("err", err);
+  }
 });
 
-app.delete("/delete-book/:id", (req, res) => {
+app.get("/get-books", async (req, res) => {
+  try {
+    const books = await BookModel.find({});
+    res.send(books);
+    console.log(books);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.delete("/delete-book/:id", async (req, res) => {
   const bookId = req.params.id;
-  db.query("DELETE FROM books WHERE id = ?", bookId, (err, result) => {
-    if (err) {
-      console.log("error", err);
-    } else {
-      res.send("data deleted successfully");
-    }
-  });
+  try {
+    const books = await BookModel.findByIdAndRemove(bookId).exec();
+    res.send("deleted successfully");
+  } catch (err) {
+    console.log(err);
+  }
 });
 
-app.put("/edit-book", (req, res) => {
+app.put("/edit-book", async (req, res) => {
   const bookName = req.body.bookName;
   const genre = req.body.genre;
   const hardBound = req.body.hardBound;
@@ -71,16 +67,22 @@ app.put("/edit-book", (req, res) => {
   const price = req.body.price;
   const id = req.body.id;
 
-  db.query(
-    "UPDATE books SET bookName= ?,genre = ?,price = ?,hardBound = ?,pdf = ?,paperBack = ? WHERE id = ?",
-    [bookName, genre, price, hardBound, pdf, paperBack, id],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.send("data updated successfully");
+  try {
+    const updatedResult = await BookModel.findByIdAndUpdate(
+      { _id: id },
+      {
+        bookName: bookName,
+        genre: genre,
+        hardBound: hardBound,
+        pdf: pdf,
+        paperBack: paperBack,
+        price: price,
       }
-    }
-  );
+    );
+    res.send("Data updated");
+    console.log(updatedResult);
+  } catch (error) {
+    console.log(error);
+  }
 });
 app.listen(3001, () => console.log("running"));

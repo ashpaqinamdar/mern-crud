@@ -26,7 +26,9 @@ function AddBook(props) {
     price: props.location?.state?.data?.price
       ? props.location?.state?.data?.price
       : "",
-    id: props.location?.state?.data?.id ? props.location?.state?.data?.id : "",
+    id: props.location?.state?.data?._id
+      ? props.location?.state?.data?._id
+      : "",
   });
   const [error, setError] = useState({
     bookNameError: false,

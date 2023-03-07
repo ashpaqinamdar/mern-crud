@@ -24,10 +24,6 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
 export default function TableComponent({ books, handleEdit, deleteBook }) {
   const classes = useStyles();
   const navigate = useHistory();
@@ -110,7 +106,7 @@ export default function TableComponent({ books, handleEdit, deleteBook }) {
                     <span title="Delete">
                       <AiOutlineDelete
                         style={{ fontSize: 22, cursor: "pointer" }}
-                        onClick={() => deleteBook(row.id)}
+                        onClick={() => deleteBook(row._id)}
                       />
                     </span>
                   </TableCell>
