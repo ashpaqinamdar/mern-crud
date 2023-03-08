@@ -12,3 +12,6 @@ if (
 }
 
 export const getAllBooks = `${apiPath}/get-books`;
+export const deleteBooks = (id) => `${apiPath}/delete-book/${id}`;
+export const editBook = `${apiPath}/edit-book`;
+export const addBook = `${apiPath}/add-book`;

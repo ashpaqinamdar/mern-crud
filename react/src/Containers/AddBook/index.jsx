@@ -4,6 +4,7 @@ import Axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { editBook, addBook } from "../../URL";
 
 const genre = [
   { genre: "Fiction/Fantasy", id: 1 },
@@ -123,7 +124,7 @@ function AddBook(props) {
 
     if (pass) {
       if (props.location?.state?.edit) {
-        Axios.put("http://localhost:3001/edit-book", {
+        Axios.put(editBook, {
           bookName: bookInfo.bookName,
           genre: bookInfo.genre,
           price: bookInfo.price,
@@ -144,7 +145,7 @@ function AddBook(props) {
             return "";
           });
       } else {
-        Axios.post("http://localhost:3001/add-book", {
+        Axios.post(addBook, {
           bookName: bookInfo.bookName,
           genre: bookInfo.genre,
           price: bookInfo.price,

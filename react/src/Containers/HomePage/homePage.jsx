@@ -4,7 +4,7 @@ import Axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import { getAllBooks } from "../../URL/index";
+import { getAllBooks, deleteBooks } from "../../URL/index";
 
 function HomePage() {
   const [books, setBooks] = useState([]);
@@ -34,7 +34,7 @@ function HomePage() {
   };
 
   const deleteBook = (id) => {
-    Axios.delete(`http://localhost:3001/delete-book/${id}`)
+    Axios.delete(deleteBooks(id))
       .then((res) => {
         getBooks();
         toast("Book deleted successfully");
