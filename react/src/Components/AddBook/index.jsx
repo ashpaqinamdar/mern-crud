@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import Checkbox from "@material-ui/core/Checkbox";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import LoadingState from "../../Components/Loader";
 
 function AddBookForm({
   bookInfo,
@@ -16,6 +17,7 @@ function AddBookForm({
   handleChangeType,
   handleSubmit,
   error,
+  loading,
 }) {
   const navigate = useHistory();
   const navigateToHome = () => {
@@ -100,8 +102,13 @@ function AddBookForm({
           onClick={() => handleSubmit(bookInfo.id)}
           className="buttonClass"
           style={{ marginTop: "30px", padding: "6px 16px" }}
+          loading={true}
         >
-          Submit
+          {loading ? (
+            <LoadingState Width={30} Height={20} initial={false} />
+          ) : (
+            "Submit"
+          )}
         </Button>
       </div>
     </div>

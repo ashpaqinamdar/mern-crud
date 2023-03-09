@@ -31,6 +31,7 @@ function AddBook(props) {
       ? props.location?.state?.data?._id
       : "",
   });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState({
     bookNameError: false,
     genreError: false,
@@ -121,7 +122,7 @@ function AddBook(props) {
     type.map((item) => {
       typeToSend[item.name] = item.checked;
     });
-
+    setLoading(true);
     if (pass) {
       if (props.location?.state?.edit) {
         Axios.put(editBook, {
@@ -142,6 +143,7 @@ function AddBook(props) {
           .catch((e) => {
             console.log("errr", e);
             toast("failed to update book");
+            setLoading(false);
             return "";
           });
       } else {
@@ -162,6 +164,7 @@ function AddBook(props) {
           .catch((e) => {
             console.log("errr", e);
             toast("failed to add book");
+            setLoading(false);
             return "";
           });
       }
@@ -178,6 +181,7 @@ function AddBook(props) {
         handleChangeType={(e) => handleChangeType(e)}
         handleSubmit={(id) => handleSubmit(id)}
         error={error}
+        loading={loading}
       />
     </div>
   );
