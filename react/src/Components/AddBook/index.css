@@ -53,3 +53,13 @@ label {
   color: red;
   padding-top: 5px;
 }
+.uploaded-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-top: 20px;
+}
+.required-sign {
+  color: #df3e3e;
+  font-size: 15px;
+}

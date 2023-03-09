@@ -11,6 +11,7 @@ const App = () => {
     <Switch>
       <Route path="/add-book" component={AddBook} />
       <Route path="/edit-book" component={AddBook} />
+      <Route path="/view-book-details" component={AddBook} />
       <Route path="/" component={HomePage} />
     </Switch>
   );

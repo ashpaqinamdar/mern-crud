@@ -11,7 +11,12 @@ import "./index.css";
 import Button from "@mui/material/Button";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { FiEdit } from "react-icons/fi";
-import { AiFillFilePdf, AiOutlineBook, AiOutlineDelete } from "react-icons/ai";
+import {
+  AiFillFilePdf,
+  AiOutlineBook,
+  AiOutlineDelete,
+  AiOutlineEye,
+} from "react-icons/ai";
 import { BsNewspaper } from "react-icons/bs";
 
 const useStyles = makeStyles({
@@ -24,7 +29,12 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TableComponent({ books, handleEdit, deleteBook }) {
+export default function TableComponent({
+  books,
+  handleEdit,
+  deleteBook,
+  viewBook,
+}) {
   const classes = useStyles();
   const navigate = useHistory();
 
@@ -50,6 +60,7 @@ export default function TableComponent({ books, handleEdit, deleteBook }) {
           <Table className={classes.table} aria-label="simple table">
             <TableHead>
               <TableRow>
+                <TableCell>Cover Image</TableCell>
                 <TableCell>Book Name</TableCell>
                 <TableCell align="left">Genre</TableCell>
                 <TableCell align="left">Available In</TableCell>
@@ -61,6 +72,13 @@ export default function TableComponent({ books, handleEdit, deleteBook }) {
             <TableBody>
               {books?.map((row) => (
                 <TableRow key={row.id}>
+                  <TableCell component="th" scope="row" align="center">
+                    {row?.coverImage ? (
+                      <img src={row.coverImage} width="20px" />
+                    ) : (
+                      "N/A"
+                    )}
+                  </TableCell>
                   <TableCell component="th" scope="row">
                     {row.bookName}
                   </TableCell>
@@ -97,7 +115,7 @@ export default function TableComponent({ books, handleEdit, deleteBook }) {
                       <FiEdit
                         style={{
                           fontSize: 20,
-                          marginRight: 20,
+                          marginRight: 10,
                           cursor: "pointer",
                         }}
                         onClick={() => handleEdit(row)}
@@ -105,8 +123,18 @@ export default function TableComponent({ books, handleEdit, deleteBook }) {
                     </span>
                     <span title="Delete">
                       <AiOutlineDelete
-                        style={{ fontSize: 22, cursor: "pointer" }}
+                        style={{
+                          fontSize: 22,
+                          marginRight: 10,
+                          cursor: "pointer",
+                        }}
                         onClick={() => deleteBook(row._id)}
+                      />
+                    </span>
+                    <span title="view">
+                      <AiOutlineEye
+                        style={{ fontSize: 22, cursor: "pointer" }}
+                        onClick={() => viewBook(row)}
                       />
                     </span>
                   </TableCell>

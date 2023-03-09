@@ -32,6 +32,11 @@ function AddBook(props) {
       : "",
   });
   const [loading, setLoading] = useState(false);
+  const [imageBase64, setImageBase64] = useState(
+    props.location?.state?.data?.coverImage
+      ? props.location?.state?.data?.coverImage
+      : ""
+  );
   const [error, setError] = useState({
     bookNameError: false,
     genreError: false,
@@ -122,8 +127,9 @@ function AddBook(props) {
     type.map((item) => {
       typeToSend[item.name] = item.checked;
     });
-    setLoading(true);
+
     if (pass) {
+      setLoading(true);
       if (props.location?.state?.edit) {
         Axios.put(editBook, {
           bookName: bookInfo.bookName,
@@ -133,6 +139,7 @@ function AddBook(props) {
           pdf: typeToSend.PDF,
           paperBack: typeToSend.PaperBack,
           id: id,
+          coverImage: imageBase64 ? imageBase64 : "",
         })
           .then(() => {
             navigate.push({
@@ -154,6 +161,7 @@ function AddBook(props) {
           hardBound: typeToSend.Hardbound,
           pdf: typeToSend.PDF,
           paperBack: typeToSend.PaperBack,
+          coverImage: imageBase64 ? imageBase64 : "",
         })
           .then(() => {
             navigate.push({
@@ -171,6 +179,39 @@ function AddBook(props) {
     }
   };
 
+  const handleImageUpload = async (e) => {
+    let file = e.target.files[0];
+    let fileType = file.type; // image/jpeg
+    let fileSize = file.size; // 3MB
+
+    if (fileSize > 2 * 1000000) {
+      alert(
+        `File size is too large, please upload image of size less than 2MB.\nSelected File Size: ${
+          fileSize / 1000000
+        }MB only`
+      );
+      return;
+    }
+    getBase64(e.target.files[0], (result) => {
+      setImageBase64(result);
+    });
+  };
+
+  function getBase64(file, cb) {
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      cb(reader.result);
+      console.log(reader.result);
+    };
+    reader.onerror = function (error) {
+      console.log("Error: ", error);
+    };
+  }
+  const handleRemoveImage = () => {
+    setImageBase64("");
+  };
+
   return (
     <div>
       <AddBookForm
@@ -182,6 +223,13 @@ function AddBook(props) {
         handleSubmit={(id) => handleSubmit(id)}
         error={error}
         loading={loading}
+        handleImageUpload={handleImageUpload}
+        image={imageBase64}
+        handleRemoveImage={handleRemoveImage}
+        view={
+          props?.location?.state?.view ? props?.location?.state?.view : false
+        }
+        data={props?.location?.state?.data}
       />
     </div>
   );

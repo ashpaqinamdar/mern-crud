@@ -3,9 +3,13 @@ const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 const BookModel = require("./models/Books");
+const bodyParser = require("body-parser");
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10mb", extended: true }));
+app.use(
+  express.urlencoded({ limit: "10mb", extended: true, parameterLimit: 50000 })
+);
 
 mongoose.connect(
   "mongodb+srv://inamdarashpaq:qP6bJh1JICE3dqF2@merncrud.3c3bmys.mongodb.net/?retryWrites=true&w=majority",
@@ -21,6 +25,7 @@ app.post("/add-book", async (req, res) => {
   const pdf = req.body.pdf;
   const paperBack = req.body.paperBack;
   const price = req.body.price;
+  const coverImage = req.body.coverImage;
 
   const book = new BookModel({
     bookName: bookName,
@@ -29,6 +34,7 @@ app.post("/add-book", async (req, res) => {
     pdf: pdf,
     paperBack: paperBack,
     price: price,
+    coverImage: coverImage,
   });
 
   try {
@@ -43,7 +49,6 @@ app.get("/get-books", async (req, res) => {
   try {
     const books = await BookModel.find({});
     res.send(books);
-    console.log(books);
   } catch (err) {
     console.log(err);
   }
@@ -67,6 +72,7 @@ app.put("/edit-book", async (req, res) => {
   const paperBack = req.body.paperBack;
   const price = req.body.price;
   const id = req.body.id;
+  const coverImage = req.body.coverImage;
 
   try {
     const updatedResult = await BookModel.findByIdAndUpdate(
@@ -78,10 +84,10 @@ app.put("/edit-book", async (req, res) => {
         pdf: pdf,
         paperBack: paperBack,
         price: price,
+        coverImage: coverImage,
       }
     );
     res.send("Data updated");
-    console.log(updatedResult);
   } catch (error) {
     console.log(error);
   }

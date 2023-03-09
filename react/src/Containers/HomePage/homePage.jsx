@@ -28,12 +28,23 @@ function HomePage() {
         return "";
       });
   };
+
   const handleEdit = (row) => {
     navigate.push({
       pathname: "/edit-book",
       state: {
         data: row,
         edit: true,
+      },
+    });
+  };
+
+  const viewBook = (data) => {
+    navigate.push({
+      pathname: "/view-book-details",
+      state: {
+        data: data,
+        view: true,
       },
     });
   };
@@ -62,6 +73,7 @@ function HomePage() {
           handleEdit={(row) => handleEdit(row)}
           deleteBook={(id) => deleteBook(id)}
           loading={loading}
+          viewBook={viewBook}
         />
       )}
     </div>
